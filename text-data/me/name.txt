@@ -1,0 +1,117 @@
+<style>
+#title {
+  font-size:90px;
+  text-align: center;
+  width: 100%;
+  padding-top:50px;
+}
+#title p{
+  margin-bottom:16px;
+}
+#nameDiv {
+  background-color: #fff;
+  height: 100%;
+}
+#description {
+  text-align: center;
+  padding: 25% 45px 20px 35px;
+}
+#cyanLayer {
+  z-index: 3;
+  color:#2cfcfd;
+  position: absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width: 100%;
+  opacity: 0.5;
+}
+#mainLayerText {
+  color:#fff;
+  z-index: 5;
+  position: absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width: 100%;
+}
+#blueLayer {
+  z-index: 4;
+  color:#0c2ffb;
+  position: absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width: 100%;
+}
+#redLayer {
+  z-index: 2;
+  color:#fb203b;
+  position: absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width: 100%;
+}
+#yellowLayer {
+  z-index: 1;
+  color:#fefc4b;
+  position: absolute;
+  left:50%;
+  transform:translateX(-50%);
+  width: 100%;
+}
+#testDiv {
+  background-color: red;
+  position: absolute;
+  z-index: 100;
+  left:0;
+  top:0;
+  height:4px;
+  width:4px;
+  border-radius: 4px;
+}
+</style>
+<script>
+var mainLayerTextDiv = document.getElementById("mainLayerText");
+var cyanDiv = document.getElementById("cyanLayer");
+var blueDiv = document.getElementById("blueLayer");
+var redDiv = document.getElementById("redLayer");
+var yellowDiv = document.getElementById("yellowLayer");
+var divMovementDistance = 4;
+var distanceVector={};
+var distance=0
+var unitVector={};
+function gatherDataForMovingDivs(){
+  centerDivRect = mainLayerTextDiv.getBoundingClientRect();
+  centerPosition = {x:(centerDivRect.width/2),y:(centerDivRect.top-divMovementDistance)+((centerDivRect.height/2)-divMovementDistance)};
+  //testDiv.style.left = (centerPosition.left)+"px";
+  //testDiv.style.top = (centerPosition.top)+"px";
+  var clientXPos = event.clientX || 1000;
+  var clientYPos = event.clientY || 100;
+  mousePosition = {x:(clientXPos-(centerDivRect.left)),y:clientYPos};
+  moveDivs(mousePosition, centerDivRect);
+}
+function moveDivs(locationOfMouse, centerDivRect){
+  distanceVector = {x:centerPosition.x-mousePosition.x,y:centerPosition.y-mousePosition.y};
+  distance = Math.sqrt((distanceVector.x*distanceVector.x)+ (distanceVector.y*distanceVector.y));
+  unitVector = {x:(distanceVector.x/distance),y:(distanceVector.y/distance)};
+  cyanDiv.style.left = (centerPosition.x+(unitVector.x*divMovementDistance))+"px";
+  cyanDiv.style.top = (centerDivRect.top+(unitVector.y*divMovementDistance)-4)+"px";
+  blueDiv.style.left = (centerPosition.x+(unitVector.x*(divMovementDistance/2)))+"px";
+  blueDiv.style.top = (centerDivRect.top+(unitVector.y*(divMovementDistance/2))-4)+"px";
+  redDiv.style.left = (centerPosition.x-(unitVector.x*(divMovementDistance/2)))+"px";
+  redDiv.style.top = (centerDivRect.top-(unitVector.y*(divMovementDistance/2))-4)+"px";
+  yellowDiv.style.left = (centerPosition.x-(unitVector.x*divMovementDistance))+"px";
+  yellowDiv.style.top = (centerDivRect.top-(unitVector.y*divMovementDistance)-4)+"px";
+}
+</script>
+<div id="nameDiv" onmousemove="gatherDataForMovingDivs()">
+  <div id="title">
+    <p id="mainLayerText">Caleb Kuester</p>
+    <p id="cyanLayer">Caleb Kuester</p>
+    <p id="blueLayer">Caleb Kuester</p>
+    <p id="redLayer">Caleb Kuester</p>
+    <p id="yellowLayer">Caleb Kuester</p>
+  </div>
+  <div id="description">
+    <p>Of course you know that already. That's why you're here.</p>
+    <p>Greetings!</p>
+  </div>
+</div>

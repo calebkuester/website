@@ -1,0 +1,424 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.5/svg.js" integrity="sha256-81Oyfi8LP8gMM9ILF+IjKbSXuYo7rrML+5kH4lwwCHs=" crossorigin="anonymous"></script>
+
+<script type="text/javascript" src="../utilities/javascript_schema_classes/hypermeasure.js"></script>
+<script type="text/javascript" src="../utilities/javascript_schema_classes/notes_panel.js"></script>
+<script type="text/javascript" src="../utilities/javascript_schema_classes/note.js"></script>
+<script type="text/javascript" src="../utilities/javascript_schema_classes/track.js"></script>
+
+<!--https://www.npmjs.com/package/midi-parser-js-->
+<script type='text/javascript' src='../utilities/third_party_resources/midi-parser.js'></script>
+<script type='text/javascript' src='../utilities/functions.js'></script>
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script> var controlPanelFromTop = '40px';</script>
+
+<style>
+	html, body, #canvas{
+		width: 100%;
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	.hide{
+		visibility: hidden;
+	}
+	.slidecontainer{
+		width: 100%;
+	}
+	.slider{
+		width: 100%;
+	}
+	.container {
+		width: 800px;
+		@include make-container();
+	}
+	#trackSelectorButton{
+		min-width: 150px;
+	}
+	.slider:hover {
+	    opacity: 1;
+	}
+	
+	.slider::-webkit-slider-thumb {
+	    -webkit-appearance: none;
+	    appearance: none;
+	    width: 25px;
+	    height: 25px;
+	    background: #6C82F0;
+	    cursor: pointer;
+	}
+	
+	.slider::-moz-range-thumb {
+	    width: 25px;
+	    height: 25px;
+	    cursor: pointer;
+	}
+	.slider {
+	    -webkit-appearance: none;
+	    width: 100%;
+	    height: 25px;
+	    background: #d3d3d3;
+	    outline: none;
+	    opacity: 0.7;
+	    -webkit-transition: .2s;
+	    transition: opacity .2s;
+	}
+	#speedDisplay{
+		
+	}
+	#speedText{
+		
+	}
+	.centered-text{
+		text-align: center;
+	}
+}
+</style>
+	
+
+<head>
+	<title>SVG.js</title>
+</head>
+<body>
+	<div id="controlPanelPadding" style="width: 100%">
+		<div id="controlPanel" style="position: absolute; padding-left: 33.33%; width: 100%">
+			<div class="container" style="width: 70%;">
+				<div class="row">
+					<div class="col-md-2">
+						Timing: 
+					</div>
+					<div class="col-md-2">
+						<div class="row">
+							A
+						</div>
+						<div class="row">
+							B
+						</div>	
+					</div>
+					<div class="col-md-6">
+						Sound All
+						<br/>
+						Sound Selected
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<div>&nbsp;</div><!--spacer to put the dropdown at the same level as the speed bar-->
+						<div class="dropdown">
+			  				<button id="trackSelectorButton" class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="musicTrackMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								Select Track
+							</button>
+							<div id="selectATrack" class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+							</div>
+						</div>
+					</div>
+					<div class="col-md-8">
+						<div id ="speedText" class="centered-text">
+							Change Speed
+						</div>
+						<div id="speedSlider" class="slidecontainer">
+							<input type="range" min="-10" max="10" value="0" class="slider" id="range" oninput="speedSliderValueChanged(this.value);">
+						</div>
+						<div id ="speedDisplay" class="centered-text">
+							0
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-4">
+						<button type="button" class="btn btn-success" onclick="playPressed()">Play</button>
+					</div>
+					<div class="col-md-4">
+						<button type="button" class="btn btn-warning" onclick="pausePressed()">Pause</button>
+					</div>
+					<div class="col-md-4">
+						<button type="button" class="btn btn-danger" onclick="stopPressed()">Stop</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div id="canvas"></div>
+</body>
+
+<?php 
+
+$filename = '../utilities/third_party_resources/midi/JSMIDIparser.js';
+if (file_exists($filename)) {
+    echo "The file $filename exists";
+} else {
+    echo "The file $filename does not exist";
+    //include($filename);
+}
+//<!--https://cdnjs.cloudflare.com/ajax/libs/svg.js/2.6.5/svg.min.js-->
+
+ 
+?>
+
+<script>
+	var state = 'stop';
+	var noteFrequencyTable = [];
+	var notesPanel;
+	var midiChannelList=[];
+	var currentConvertedTrack = -1;
+	var measuresPerHypermeasure=0;
+	function loadData(){
+		noteFrequencyTable = setFrequencyTable();
+		var fileName='../utilities/songs/FrogsTheme.mid';
+		parseFile(fileName, dataLoaded);
+	}
+	loadData();
+	
+	function dataLoaded(){
+		console.log(parsedMidiFile);
+		makeChannels(parsedMidiFile, createMusicPanels);
+	}
+	function play(){
+		notesPanel.startPlaying();
+	}
+	function createMusicPanels(){
+		var containerHeight = document.getElementById('canvas').clientHeight;
+		var containerWidth = document.getElementById('canvas').clientWidth;
+		var space = containerHeight/60;
+		var musicSheetStartLocX=0;
+		var musicSheetStartLocY=0;
+		this.measuresPerHypermeasure=4;
+		//document.getElementById("canvas").addEventListener("click", play); //TODO: this listener displays an important behavior, but is unnecessary.
+
+		var instrumentPanel = SVG('canvas').size((containerWidth/3), containerHeight);		//shows the finger placements (placeholder)
+		document.getElementById("controlPanel").style.paddingTop = (((containerHeight/2))+'px');//moves the control panel down above the top of the screen
+		document.getElementById(instrumentPanel.node.id).style.background='#FFDDDD';
+		fillTrackDropdown();
+		//60000 / (BPM * PPQ)
+		var tempo=0;
+		var timeSigNumerator = 0;
+		var timeSigDenominat = 0;
+		var clocksPerTick = 0;
+		var thirtySecondNotesPer24MidiClocks = 0;
+		for(var i=0; i<parsedMidiFile.tracks[0].metaEventList.length; i++){
+			if(parsedMidiFile.tracks[0].metaEventList[i].command=='51'){
+				tempo = parsedMidiFile.tracks[0].metaEventList[i].tempo;
+			}else if(parsedMidiFile.tracks[0].metaEventList[i].command=='58'){
+				timeSigNumerator = parsedMidiFile.tracks[0].metaEventList[i].nn;
+				timeSigDenominat = Math.pow(2, parsedMidiFile.tracks[0].metaEventList[i].dd);
+				clocksPerTick = parsedMidiFile.tracks[0].metaEventList[i].cc;
+				thirtySecondNotesPer24MidiClocks = parsedMidiFile.tracks[0].metaEventList[i].bb;
+			}
+		}
+		var secondsPerQuarterNote = tempo / 1000000;
+
+		//tempo is the number of microseconds per quarternote
+		
+		var ticksPerMs =  ((parsedMidiFile.header.ticksPerQuarterNote/secondsPerQuarterNote))/1000;
+		console.log('AND HERE IT IS (ticks per mSecond): '+ ticksPerMs);
+		var hyperMeasureTimeInMS = measuresPerHypermeasure*(secondsPerQuarterNote*1000)*(4/timeSigDenominat)*timeSigNumerator;
+		console.log('AND HERE IT IS (mSeconds per bar): '+ hyperMeasureTimeInMS+' = '+measuresPerHypermeasure+'*'+secondsPerQuarterNote*1000+'*'+'(4/'+timeSigDenominat+')*'+timeSigNumerator);
+		
+		
+		var bpm = (60000000/tempo)*(timeSigDenominat/4);
+		console.log('bpm = '+bpm);
+		console.log("tempo = "+tempo);
+		console.log("time signature = "+timeSigNumerator+'/'+timeSigDenominat);
+		console.log('clocks per tick = '+clocksPerTick);
+		console.log("thirtySecond Notes Per 24 midi clocks = "+thirtySecondNotesPer24MidiClocks);
+		if(parsedMidiFile.header.timingFormat==1){
+			console.log("Ticks per frame = "+ parsedMidiFile.header.ticksPerFrame);
+			console.log("Frames per Second = "+parsedMidiFile.header.framesPerSecond);
+		}else if(parsedMidiFile.header.timingFormat==0){
+			console.log("ticks per quarter note= "+parsedMidiFile.header.ticksPerQuarterNote);
+		}
+		console.log('======================================');
+		console.log('a hypermeasure has 4 measures');
+		console.log('a measure has '+timeSigNumerator+' beats');
+		console.log('a beat is a 1/'+timeSigDenominat+' note');
+		console.log('a 1/'+timeSigDenominat+' note has '+parsedMidiFile.header.ticksPerQuarterNote+' ticks');
+		console.log('there are '+clocksPerTick+' clocks per tick');
+		notesPanel = notesFramePanel(Math.ceil(0.15*containerHeight), containerWidth, containerHeight, 'canvas', space, Math.ceil((2*containerWidth)/3)-(50), 1, 50, Math.ceil(containerHeight*0.05), parsedMidiFile, hyperMeasureTimeInMS/*hyperMeasureTimeInMS*/, ticksPerMs);
+	}
+	function fillTrackDropdown(){
+		var dropdownButton = document.getElementById("selectATrack");
+		$("#selectATrack").empty();								//remove all of the options currently in the track selector
+		var length = midiChannelList.length;
+		
+		for(var i=0;i<length; i++){
+			var li = document.createElement("li");
+			li.classList.add("dropdown-item");
+			li.appendChild(document.createTextNode(midiChannelList[i].trackName));
+			li.addEventListener("click", trackSelected);
+			dropdownButton.appendChild(li);
+		}
+	}
+	//song.play();
+	function makeChannels(midiObject, callback){
+		var numberOfTracks = midiObject.header.numberOfTracks;
+		var formatType = midiObject.header.formatType;
+		var trackStart = 0;
+		var currentEventList=[];
+		var currentNumerator;
+		var currentDenominator;
+		var currentClocksPerTick;
+		var currentNotesPerClocksData;
+		var currentMajorMinor=0;
+		var currentSharpsFlats=0;
+		if(formatType==1){//in track type of 1, the first track is timing information
+			trackStart++;
+			currentNumerator = midiObject.tracks[0].metaEventList[0].nn;
+			currentDenominator = Math.pow(2, midiObject.tracks[0].metaEventList[0].dd);
+			currentClocksPerTick = midiObject.tracks[0].metaEventList[0].cc;
+			currentNotesPerClocksData = midiObject.tracks[0].metaEventList[0].bb;
+		}else{
+			throw new Error("MIDI format type is unsupported: "+formatType);
+		}
+
+		for(var i=trackStart; i<numberOfTracks; i++){
+			var numberOfCommands = midiObject.tracks[i].metaEventList.length;
+			var currentTrack = new Track();
+			for(j=0; j<numberOfCommands; j++){
+				switch(midiObject.tracks[i].metaEventList[j].command){
+					case '03':
+						//track name
+						currentTrack.addName(midiObject.tracks[i].metaEventList[j].trackName);
+						break;
+					case '59':
+						//key signature
+						currentTrack.addSharpsFlats(midiObject.tracks[i].metaEventList[j].sf);
+						currentTrack.addMajorMinor(midiObject.tracks[i].metaEventList[j].mi);
+						break;
+					case 'BLEND':
+						currentTrack.addNote(
+							new NoteEvent(
+								null, 
+								null, 
+								"../utilities/image_assets/filled_notehead_with_stem.svg", 
+								null, 
+								midiObject.tracks[i].metaEventList[j].command,
+								null,
+								midiObject.tracks[i].metaEventList[j].deltaTime,
+								null,
+								midiObject.tracks[i].metaEventList[j].MSB,
+								midiObject.tracks[i].metaEventList[j].LSB
+							)
+						);
+						break;
+					case 'OFF':
+						currentTrack.addNote(
+							new NoteEvent(
+								getFrequency(midiObject.tracks[i].metaEventList[j].note), 
+								getOctave(midiObject.tracks[i].metaEventList[j].note), 
+								"../utilities/image_assets/filled_notehead_with_stem.svg", 
+								getNoteLetter(midiObject.tracks[i].metaEventList[j].note), 
+								midiObject.tracks[i].metaEventList[j].command,
+								midiObject.tracks[i].metaEventList[j].velocity,
+								midiObject.tracks[i].metaEventList[j].deltaTime,
+								convertNoteToKeyNumber(midiObject.tracks[i].metaEventList[j].note),
+								null,
+								null
+							)
+						);
+						break;
+					case 'ON':
+						currentTrack.addNote(
+							new NoteEvent(
+								getFrequency(midiObject.tracks[i].metaEventList[j].note), 
+								getOctave(midiObject.tracks[i].metaEventList[j].note), 
+								"../utilities/image_assets/filled_notehead_with_stem.svg", 
+								getNoteLetter(midiObject.tracks[i].metaEventList[j].note), 
+								midiObject.tracks[i].metaEventList[j].command,
+								midiObject.tracks[i].metaEventList[j].velocity,
+								midiObject.tracks[i].metaEventList[j].deltaTime,
+								convertNoteToKeyNumber(midiObject.tracks[i].metaEventList[j].note),
+								null,
+								null
+							)
+						);
+						break;
+					case '2F':
+						//end
+						if(currentTrack.hasNotes()){
+							midiChannelList[midiChannelList.length]=currentTrack;
+						}
+						break;
+					default: 
+						break;
+				}
+			}
+		}
+		console.log(midiChannelList);
+		callback();
+		
+	}
+	function convertNoteToKeyNumber(input){
+		//TODO: Fix
+		return (input%12)-6;
+	}
+	function setFrequencyTable(){
+		var a = 440; //key a is 440 hz
+		var table = [];
+		for(var i=0; i<128; i++){
+			table[i]=(a / 32)*(Math.pow(2, (i-9)/12));
+		}
+		return table;
+	}
+	function getFrequency(input){
+		return noteFrequencyTable[input];
+	}
+	function getNoteLetter(input){
+		var octaveList = ["C", "C#/D♭", "D", "D#/E♭", "E", "F", "F#/G♭", "G", "G#/A♭", "A", "A#/B♭", "B"];
+		return octaveList[input%12];
+	}
+	function getOctave(input){
+		return Math.floor(input/12)-5;
+	}
+	function trackSelected(target){
+		//set the button text to the selected value
+		var selectedValue=target.srcElement.childNodes[0].nodeValue;
+		document.getElementById("trackSelectorButton").innerText=selectedValue;
+		var length = midiChannelList.length;
+		for(var i=0; i<length; i++){
+			if(midiChannelList[i].trackName===selectedValue){
+				staticMidiCommands=midiChannelList[i].commandList;					
+				trackChanged(midiChannelList[i].commandList, midiChannelList[i].trackName);//trackChanged() exists in notes_panel.js
+				currentConvertedTrack = i;
+				break;
+			}
+		}
+		
+	}
+	function playPressed(){
+		if(state==='stop'){
+			state = 'play';
+			play();
+		}else if(state==='pause'){
+			state = 'play';
+			play();
+		}
+	}
+	function pausePressed(){
+		if(state==='play'){
+			state='pause';
+		}
+	}
+	function stopPressed(){
+		if(state==='play'){
+			state = 'stop';
+			stop();
+		}else if(state==='pause'){
+			state = 'stop';
+			shiftUp();
+		}
+		notesPanel.stopPlaying();
+	}
+	function speedSliderValueChanged(value){
+		if(value>0){
+			document.getElementById('speedDisplay').innerText='+'+value;
+		}else{
+			document.getElementById('speedDisplay').innerText=value;
+		}
+		
+	}
+</script>

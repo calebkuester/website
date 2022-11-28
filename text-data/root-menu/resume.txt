@@ -1,0 +1,74 @@
+<link href="https://fonts.googleapis.com/css?family=Quicksand:700&display=swap" rel="stylesheet">
+<style>
+#elevatorSpeechScreen {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 25px;
+  height:100%;
+  width:100%;
+  background-color: #083045;
+  position:absolute;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#elevatorSpeechScreen p a:hover{
+  background-color: #FFAD00;
+  border-radius: 20%
+}
+#textArea {
+  margin: 20px 0 0 40px;
+  color: #fff;
+  width: 60%;
+}
+#backgroundImage{
+  /*background-image: url("../assets/business-meeting.png");*/
+  height:100%;
+  width:100%;
+  position:absolute;
+  z-index:0;
+  opacity:0.1;
+  filter: alpha(opacity=10); /* For IE8 and earlier *
+}
+</style>
+<script>
+function loadImageToDiv(url, imageIdToChange, callback){
+  var xhr = new XMLHttpRequest();
+  xhr.onload = function() {
+    var reader = new FileReader();
+    reader.onloadend = function() {
+      $("#"+imageIdToChange).attr('src', reader.result);
+      if(callback!==null){
+        callback;
+      }
+      
+    };
+    reader.readAsDataURL(xhr.response);
+  };
+  xhr.open("GET", url);
+  xhr.responseType = "blob";
+  xhr.send();
+}
+</script>
+<body onload="loadImageToDiv('../assets/business-meeting.png', 'backgroundImage', null)">
+<div id="backgroundImage"></div>
+<div id="elevatorSpeechScreen">
+  <div id="backgroundImage"></div>
+  <div id="textArea">
+    <p>
+      I am excited to be a in the field of software development. My goal, as always, is to improve and grow my expertise and move the world with excellence.
+    </p>
+    <p>
+      I have an educational background in software engineering and I live what I love. I also have professional experience in ticketized IT environments and direct-to-client IT support.
+    </p>
+    <p>
+      My experience in software design is based on industry-leading best practices, which include languages with levels ranging from LC-3 Assembly to application-specific languages, such as SQL, Java, and Javascript.
+    </p>
+    <p>
+      My design hierarchy is: client requirements > functionality > efficiency > fun > aesthetics. While it's great to have 3000% of each in every project, pragmatically, one always takes priority.
+    </p>
+    <p>
+      Click on the Resume Details link to access the Resume (preferred), or <a href="../text-data/resume/">here</a>.
+    </p>
+  
+  </div>
+</div>
+<body>

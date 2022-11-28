@@ -1,0 +1,83 @@
+<style>
+#meContainer {
+  background-color: #E1DABB;
+  display:inline-block;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 30px;
+  width: 100%;
+  height:100%;
+}
+.sentence {
+  display:inline-block;
+}
+#quote {
+  hyphens: auto;
+  height:100%;
+  width: auto;
+  padding: 0 2% 0 2%;
+  position: absolute;
+}
+#firstSentence {
+  border-radius: 10%;
+  background-color: #fffff0;
+  margin: 20px 0 20px 0;
+  color: #1C4670;
+  font-size: 40px;
+}
+#firstSentence p{
+  user-select: text;
+  margin: 0 10px 0 10px;
+}
+#lastSentence {
+  color: black;
+}
+#quoteSource {
+  color:#6C6A61;
+  margin: 10px 0 0 30px;
+  padding-bottom: 20px;
+}
+</style>
+<script>
+var quotes = [];
+var fontFamilies = ["Roboto", "Stylish", "Baloo Bhai", "Open Sans", "Lato", "Montserrat", "Akronim", "Roboto Condensed", "Kodchasan", "Source Sans Pro", "Oswald", "Raleway", "Anton", "Roboto Mono", "Roboto Slab", "Merriweather", "PT Sans", "Poppins", "Noto Sans", "Slabo 27px", "Ubuntu", "Open Sans Condensed:300", "Heebo", "Playfair Display", "PT Serif", "Modak", "Lora", "Muli", "Titillium Web", "Nunito", "Fira Sans", "PT Sans Narrow", "Rubik", "Noto Serif", "Macondo Swash Caps", "Nova Script", "Indie Flower", "Lobster", "Pacifico", "Dancing Script", "Shadows Into Light", "Acme", "Abril Fatface", "Righteous", "Amatic SC", "Comfortaa", "Cinzel", "Gloria Hallelujah", "News Cycle", "Rajdhani", "Just Another Hand", "Orbitron", "Permanent Marker", "Satisfy", "Kaushan Script", "Fredoka One", "Alfa Slab One", "Nanum Myeongjo", "Lobster Two", "Patrick Hand", "Lalezar", "Sacramento", "Tangerine", "Handlee", "Special Elite", "Montserrat Alternates", "Secular One", "Monoton", "Bangers", "Bad Script", "Audiowide", "Yellowtail", "Shadows Into Light Two", "Homemade Apple", "Gochi Hand", "Allerta Stencil", "Damion", "Press Start 2P", "Rock Salt", "Cousine", "Nothing You Could Do", "Fugaz One", "Fredericka the Great", "Libre Barcode 128 Text", "Baloo", "Italianno", "Reenie Beanie", "Black Ops One", "Coming Soon", "Syncopate", "Aldrich", "Shojumaru", "Cinzel Decorative", "Love Ya Like A Sister", "Bungee Inline", "Freckle Face", "Unical Antiqua", "ZCOOL KuaiLe", "Rye", "Gravitas One", "Cedarville Cursive", "Six Caps", "Faster One", "Oleo Script Swash Caps", "Vast Shadow", "Hanalei Fill", "Delius Swash Caps", "Lakki Reddy", "Finger Paint", "Over the Rainbow", "Londrina Outline", "Kranky", "Eater", "Frijole", "Condiment", "Bilbo", "Jolly Lodger", "Sarina", "Nosifer", "Peralta", "Mystery Quest", "Fascinate Inline", "Swanky and Moo Moo", "Trade Winds", "Monofett", "Henny Penny", "Eagle Lake", "New Rocker", "Griffy", "Tillana", "Rhodium Libre", "Mina", "Sirin Stencil", "Elsie Swash Caps", "Barrio", "Caesar Dressing", "Metal Mania", "Ribeye Marrow", "Kenia", "Snowburst One", "Kirang Haerang", "Gamja Flower", "Ewert", "Flavors", "Piedra", "Ruge Boogie", "Macondo", "Romanesco", "Sedgwick Ave Display", "Gorditas", "Butterfly Kids", "Miltonian", "Nova Oval", "Passero One", "Risque", "Bigelow Rules", "Butcherman"];
+var quotesLoaded = false;
+function placeData(){
+  var currentFont = fontFamilies[parseInt(Math.floor(Math.random() * (fontFamilies.length)))];
+  var randomOptionChosen=parseInt(Math.floor(Math.random() * (quotes.length)));
+  var textStyle=document.createElement('link');
+  textStyle.setAttribute("href", "https://fonts.googleapis.com/css?family="+currentFont.split(" ").join("+"));
+  textStyle.setAttribute("rel", "stylesheet");
+  document.getElementsByTagName("head")[0].appendChild(textStyle)
+  $("#firstSentence").css({"font-family": currentFont.split(":")[0]+", sans-serif", });//remove everything after the colon
+  $("#firstSentence").empty();
+  $("#quoteSource").empty();
+  $("#firstSentence").append("<p>“"+quotes[randomOptionChosen].split("--")[0]+"”</p>");
+  $("#quoteSource").append("<p>– "+quotes[randomOptionChosen].split("--")[1]+"<p>");
+}
+function loadQuotes(){
+  this.quotes={};
+  var returnValue = "";
+  var xhr = new XMLHttpRequest();
+  xhr.open("GET", "../text-data/inspirationalQuotes.txt");
+  xhr.onreadystatechange = function() {
+    returnValue=xhr.responseText;
+    quotes=returnValue.split(/\n/);
+    placeData();
+  }
+  xhr.send();
+}
+if(!quotesLoaded){
+  loadQuotes();
+  quotesLoaded=true;
+}
+</script>
+
+<div id="meContainer">
+  <div id="quote">
+    <div id="firstSentence" class="sentence"></div>
+    <!--<div id="lastSentence" class="sentence"></div>-->
+    <div id="quoteSource"></div>
+  </div>
+  
+</div>

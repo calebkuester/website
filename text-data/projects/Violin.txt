@@ -1,0 +1,32 @@
+<style>
+#description{
+    background-color: #FFF;
+    overflow-y: auto;
+    padding: 60px 40px 10px 40px;
+    height: 100%;
+    position:relative;
+}
+
+</style>
+<body>
+ <div id="description">
+  <p>This is the description of a project that I have been working on. It's a webpage that teaches someone how to play the violin by helping someone mentally map between finger positions on the violin and notes being played on a music sheet.</p>
+  <p>So basically, the idea is that you have two sides of the page: a left side, and a right side. On the left, you have a picture of the finger positions of a violin. Those will light-up when it's time to play that note. On the right, you have a music sheet, where a bar will scroll across the music with a timing relative to the song that's being played.</p>
+  <p>-- but wait! It gets better! You can play whatever song you want, as long as you're able to find the proper midi file. The page dissects the midi file and places the notes on the music sheet after you select the track you want to play (midi files frequently have several). The song may be of any length, because every measure will disappear when complete and a new one rolls-in.</p>
+  <p>Click <a href="../pages/instrument"><u>here</u></a> to see what I have so far.</p>
+  <p>Progress notes:</p>
+    <ul>
+        <li>Notes and bars placed: Check</li>
+        <li>Scrolling note progress bar: Check</li>
+        <li>Animated bars: Check</li>
+        <li>Loading Midi file of choice: Currently only works on one file type (and currently, only one file). In progress.</li>
+        <li>Finger positions image. In progress</li>
+        <li>Sound: Was working, but can't play two notes simultaneously, so in progress.</li>
+        <li>All of this needs to be refactored and have look and feel modified</li>
+    </ul>
+  <p></p>
+  <p>Interesting challenges: Midi files are built to be able to adhere to music sheet structure, which means it allows a significant amount of freedom to put stuff wherever you want. This is not to say that Midi files do adhere to that structure. That is not a requirement. This means that in order for me to display a music sheet, I must force adherance to the music sheet structure. An example: A quarter note with 60 beats per minute is exactly one second long, or 1000ms. A Midi file note can be 980ms, or 1ms for that matter. The Midi file is like the cylinder of a music box. It has all of the music instructions. It tells you how long a note should be played and which note should be played.</p>
+  <p>There are probably two reasons I can think of on why this has not been done yet. First, the above-mentioned situation could prevent this from being a definitively professional tool. Second, Midi files are somewhat antiquated. They were invented during a time when a few kilobites may mean the difference between plausible and unreasonable. In the world of terabytes floating around like candy at a parade and download speeds trivially measured in megabytes per second, Midi has lost popularity to MP3, or even MP4 formats -- to even simply utilizing free streaming services. Midi files, because they simply carry start/stop instructions, can't sound like a real instrument and can't have lyrics. The thing is that Midi formats actually make my job possible, because they're structured in a way that allows me to dissect the information easily.</p>
+  <p>You can find Midi files of most of your favorite songs, in a Google search, to give you an idea of what I'm saying.</p>
+ </div>
+</body>

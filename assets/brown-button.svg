@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<svg width="433.3333333333333" height="433.3333333333333" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <title>Brown button</title>
+ <defs>
+  <linearGradient id="linearGradient1702">
+   <stop stop-color="#ffffff" stop-opacity="0.690722" offset="0" id="stop1703"/>
+   <stop stop-color="#ffffff" stop-opacity="0" offset="1" id="stop1704"/>
+  </linearGradient>
+  <radialGradient xlink:href="#linearGradient1702" r="15.301119" id="radialGradient1706" gradientUnits="userSpaceOnUse" fy="473.03323" fx="522.89911" cy="481.86633" cx="522.89532"/>
+  <linearGradient y2="0" y1="0.9625" xlink:href="#linearGradient1697" x2="0.434782" x1="0.434782" id="linearGradient1076"/>
+  <linearGradient y2="0.933566" y1="0.077481" xlink:href="#linearGradient1697" x2="0.491802" x1="0.491802" id="linearGradient1077"/>
+  <linearGradient y2="1.321203" y1="-0.037714" xlink:href="#linearGradient1702" x2="0.482604" x1="0.478621" id="linearGradient1078"/>
+  <linearGradient spreadMethod="pad" id="svg_1">
+   <stop offset="0" stop-color="#7f3f00"/>
+   <stop offset="1" stop-color="#80c0ff"/>
+  </linearGradient>
+  <linearGradient y2="1" x2="0" id="svg_2">
+   <stop offset="0.417969" stop-color="#7f3f00"/>
+   <stop offset="1" stop-opacity="0.996094" stop-color="#b25803"/>
+  </linearGradient>
+  <linearGradient y2="0.695313" x2="0.050781" id="svg_3">
+   <stop offset="0" stop-color="#7f3f00"/>
+   <stop offset="1" stop-opacity="0.996094" stop-color="#e58327"/>
+  </linearGradient>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <g externalResourcesRequired="false" id="layer1">
+   <path fill="url(#svg_3)" fill-rule="nonzero" stroke="url(#linearGradient1077)" stroke-width="1.364453" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="4" stroke-dashoffset="0" id="path1070" d="m393.368042,203.390488a190.403656,190.403656 0 1 1 -380.807323,0a190.403656,190.403656 0 1 1 380.807323,0z"/>
+   <path opacity="0.9" fill="url(#linearGradient1078)" fill-rule="evenodd" stroke-width="0.25000000pt" id="path1713" d="m341.278168,153.23671c44.367218,-0.966797 -12.400116,-123.152863 -135.680984,-123.802773c-134.561523,-0.687119 -162.095947,110.961357 -140.719452,112.997215c0,0 36.864166,5.062607 71.939575,14.856079c56.472656,15.930817 125.549149,-13.069244 152.768723,-17.2836c30.342529,-4.697876 47.373444,15.392426 51.692139,13.233078z"/>
+  </g>
+ </g>
+</svg>
