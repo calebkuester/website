@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+	<head>
+	</head>
+	<body>
+		<!--<svg height="100" width="100">
+            <circle cx="50" cy="50" r="31" stroke="#679b08" stroke-width="9.5" fill="none" />
+            <circle cx="50" cy="50" r="6" stroke="#679b08" stroke-width="1" fill="#679b08" />
+            <line x1="50" y1="50" x2="35" y2="50" style="stroke:#679b08;stroke-width:6" />
+            <line x1="65" y1="35" x2="50" y2="50" style="stroke:#679b08;stroke-width:6" />
+            <path d="M59 65 L83 65 L75 87 Z" fill="#679b08" />
+            <rect width="20" height="9" x="70" y="56" style="fill:#eee;stroke-width:0;" />
+        </svg>-->
+		<canvas id="musicCanvas" defer="defer"></canvas>
+	</body>
+	<footer></footer>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+		}
+		body, html {
+			height:100%;
+		}
+		#musicCanvas {
+			position:absolute;
+			height:100%; width:100%;
+		}
+	</style>
+	<script>
+		//
+		// start here
+		//
+		const canvas = document.querySelector("#musicCanvas");
+		window.onresize = resizeScreenElements;
+		//const webglContext = canvas.getContext("webgl");
+		const twoDContext = canvas.getContext("2d");
+		const imageAssetNames = ["wholeNote.svg", "gClef.svg"];
+		var imageAssets = [];
+		const imageAssetSize = 2;
+		function checkCompatibility(context) {
+			if (context === null) {
+				alert("Unable to initialize WebGL. Your browser or machine may not support it.");
+				return;
+			}
+		}
+		function resizeScreenElements() {
+			//console.log(window.innerHeight);
+			//console.log(window.innerWidth);
+			//canvas.style.width = (window.innerWidth) + 'px';
+			//canvas.style.height = (window.innerHeight) + 'px';
+		}
+		function setBackground(context){
+			//context.clearColor(0.8, 0.8, 0.8, 1.0);
+			//context.clear(context.COLOR_BUFFER_BIT);
+		}
+		function loadAssets(context){
+			var assetPath = "./utilities/images/"
+			imageAssetNames.forEach(function (currentImageName, i) {
+				var currentImage = new Image();
+				currentImage.src = assetPath + currentImageName;
+				currentImage.onload = function() {
+					console.log(currentImage.src + " loaded");
+					imageAssets.push(currentImage);
+					if(currentImageName === imageAssetNames[imageAssetNames.length - 1]){
+						console.log("All images loaded");
+						draw(context);
+					}
+				}
+			});
+		}
+		function draw(context){
+			imageAssets[1].setAttribute("width", 200);
+			imageAssets[1].setAttribute("height", 200);
+			context.drawImage(imageAssets[1], 0, 0);
+		}
+		function main() {
+			checkCompatibility(twoDContext);
+			
+			// while(imageAssets.length < imageAssetSize){
+			// 	console.log("loading " + imageAssets.length + " of " + imageAssetSize);
+			// }
+			setBackground(twoDContext);
+			loadAssets(twoDContext);
+		}
+		window.onload = main;
+	</script>
+</html>

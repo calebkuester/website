@@ -13,7 +13,7 @@
   <p>This is the description of a project that I have been working on. It's a webpage that teaches someone how to play the violin by helping someone mentally map between finger positions on the violin and notes being played on a music sheet.</p>
   <p>So basically, the idea is that you have two sides of the page: a left side, and a right side. On the left, you have a picture of the finger positions of a violin. Those will light-up when it's time to play that note. On the right, you have a music sheet, where a bar will scroll across the music with a timing relative to the song that's being played.</p>
   <p>-- but wait! It gets better! You can play whatever song you want, as long as you're able to find the proper midi file. The page dissects the midi file and places the notes on the music sheet after you select the track you want to play (midi files frequently have several). The song may be of any length, because every measure will disappear when complete and a new one rolls-in.</p>
-  <p>Click <a href="../pages/instrument"><u>here</u></a> to see what I have so far.</p>
+  <p>Click <a href="../pages/instrument/violin.html"><u>here</u></a> to see what I have so far.</p>
   <p>Progress notes:</p>
     <ul>
         <li>Notes and bars placed: Check</li>
