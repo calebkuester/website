@@ -1,0 +1,147 @@
+<!doctype html>
+<script src='.\assets\WebAudioFontPlayer.js'></script>
+<script src='.\assets\sound\0401_FluidR3_GM_sf2_file.js'></script>
+<script src='.\pages\instrument\utilities\scripts\fingerPositions.js'></script>
+<script src='.\pages\instrument\utilities\scripts\midiData.js'></script>
+
+<html lang="en">
+	<head>
+	</head>
+	<body>
+		<div id="container">
+			<div id="fingerPositions">
+				<div id="buttonOverlay">
+					<div id="G3" class="note" onmousedown="playPipe(0);" onmouseup="stopPipe(0);" onmouseout="stopPipe(0);"></div>
+					<div id="D4" class="note" onmousedown="playPipe(8);" onmouseup="stopPipe(8);" onmouseout="stopPipe(8);"></div>
+					<div id="A4" class="note" onmousedown="playPipe(16);" onmouseup="stopPipe(16);" onmouseout="stopPipe(16);"></div>
+					<div id="E5" class="note" onmousedown="playPipe(24);" onmouseup="stopPipe(24);" onmouseout="stopPipe(24);"></div>
+					
+					<div id="GA3" class="note" onmousedown="playPipe(1);" onmouseup="stopPipe(1);" onmouseout="stopPipe(1);"></div>
+					<div id="DE4" class="note" onmousedown="playPipe(9);" onmouseup="stopPipe(9);" onmouseout="stopPipe(9);"></div>
+					<div id="AB4" class="note" onmousedown="playPipe(17);" onmouseup="stopPipe(17);" onmouseout="stopPipe(17);"></div>
+					<div id="F5" class="note" onmousedown="playPipe(25);" onmouseup="stopPipe(25);" onmouseout="stopPipe(25);"></div>
+					
+					<div id="A3" class="note" onmousedown="playPipe(2);" onmouseup="stopPipe(2);" onmouseout="stopPipe(2);"></div>
+					<div id="E4" class="note" onmousedown="playPipe(10);" onmouseup="stopPipe(10);" onmouseout="stopPipe(10);"></div>
+					<div id="B4" class="note" onmousedown="playPipe(18);" onmouseup="stopPipe(18);" onmouseout="stopPipe(18);"></div>
+					<div id="FG5" class="note" onmousedown="playPipe(26);" onmouseup="stopPipe(26);" onmouseout="stopPipe(26);"></div>
+					
+					<div id="AB3" class="note" onmousedown="playPipe(3);" onmouseup="stopPipe(3);" onmouseout="stopPipe(3);"></div>
+					<div id="F4" class="note" onmousedown="playPipe(11);" onmouseup="stopPipe(11);" onmouseout="stopPipe(11);"></div>
+					<div id="C5" class="note" onmousedown="playPipe(19);" onmouseup="stopPipe(19);" onmouseout="stopPipe(19);"></div>
+					<div id="G5" class="note" onmousedown="playPipe(27);" onmouseup="stopPipe(27);" onmouseout="stopPipe(27);"></div>
+					
+					<div id="B3" class="note" onmousedown="playPipe(4);" onmouseup="stopPipe(4);" onmouseout="stopPipe(4);"></div>
+					<div id="FG4" class="note" onmousedown="playPipe(12);" onmouseup="stopPipe(12);" onmouseout="stopPipe(12);"></div>
+					<div id="CD5" class="note" onmousedown="playPipe(20);" onmouseup="stopPipe(20);" onmouseout="stopPipe(20);"></div>
+					<div id="GA5" class="note" onmousedown="playPipe(28);" onmouseup="stopPipe(28);" onmouseout="stopPipe(28);"></div>
+					
+					<div id="C4" class="note" onmousedown="playPipe(5);" onmouseup="stopPipe(5);" onmouseout="stopPipe(5);"></div>
+					<div id="G4" class="note" onmousedown="playPipe(13);" onmouseup="stopPipe(13);" onmouseout="stopPipe(13);"></div>
+					<div id="D5" class="note" onmousedown="playPipe(21);" onmouseup="stopPipe(21);" onmouseout="stopPipe(21);"></div>
+					<div id="A5" class="note" onmousedown="playPipe(29);" onmouseup="stopPipe(29);" onmouseout="stopPipe(29);"></div>
+					
+					<div id="CD4" class="note" onmousedown="playPipe(6);" onmouseup="stopPipe(6);" onmouseout="stopPipe(6);"></div>
+					<div id="GA4" class="note" onmousedown="playPipe(14);" onmouseup="stopPipe(14);" onmouseout="stopPipe(14);"></div>
+					<div id="DE5" class="note" onmousedown="playPipe(22);" onmouseup="stopPipe(22);" onmouseout="stopPipe(22);"></div>
+					<div id="AB5" class="note" onmousedown="playPipe(30);" onmouseup="stopPipe(30);" onmouseout="stopPipe(30);"></div>
+					
+					<div id="D4" class="note" onmousedown="playPipe(7);" onmouseup="stopPipe(7);" onmouseout="stopPipe(7);"></div>
+					<div id="A4" class="note" onmousedown="playPipe(15);" onmouseup="stopPipe(15);" onmouseout="stopPipe(15);"></div>
+					<div id="E5" class="note" onmousedown="playPipe(23);" onmouseup="stopPipe(23);" onmouseout="stopPipe(23);"></div>
+					<div id="B5" class="note" onmousedown="playPipe(31);" onmouseup="stopPipe(31);" onmouseout="stopPipe(31);"></div>
+				</div>
+			</div>
+			<div id="controlPanel">
+			</div>
+			<div id="musicSheet">
+			</div>
+		</div>
+		<footer>
+		</footer>
+	</body>
+	<style>
+		html, body{
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+		}
+		#container{
+			height: 100%;
+			min-width: 81em;
+		}
+		#fingerPositions{
+			position: fixed;
+			left: 0;
+			top: 0;
+			background-color: rgb(125, 125, 255);
+			height: 75%;
+			width: 33%;
+			min-width: 27em;
+		}
+		#controlPanel{
+			position: fixed;
+			background-color: teal;
+			left: 0;
+			bottom: 0;
+			height: 25%;
+			width: 33%;
+			min-width: 27em;
+		}
+		#musicSheet{
+			position: fixed;
+			background-color: rgb(223, 223, 230);
+			height: 100%;
+			width: 100%;
+			z-index: -1;
+		}
+		.note{
+			position: absolute;
+			border-radius: 50%;
+			background-color: rgb(194, 140, 140);
+		}
+	</style>
+	<script>
+		var assetPath = "./pages/instrument/utilities/images/"
+		const svgFiles  = ["wholeNote.svg", "gClef.svg", "violin-finger-positions.png"];
+		function loadSVGImages(svgFileNames){
+			const imagePromises = svgFileNames.map((fileName) => {
+				return new Promise((resolve, reject) => {
+					const img = new Image();
+					img.onload = () => {
+						resolve(img);
+					};
+					img.onerror = (error) => {
+						reject(error);
+					};
+					img.src = assetPath + fileName;
+				});
+			});
+			Promise.all(imagePromises)
+			.then((images) => {
+				images.forEach((img) => {
+					//context.drawImage(img, 0, 0, img.width, img.height);
+					console.log('loaded ' + img.src);
+				});
+			})
+			.catch((error) => {
+				console.error('Error loading SVG images:', error);
+			});
+		}
+		function resize(){
+			var fingerPositionsMeasurements = document.getElementById('fingerPositions').getBoundingClientRect();
+			var musicsheet = document.getElementById('musicSheet').style.marginLeft = fingerPositionsMeasurements.width + 'px';
+			resizeFingerPositionElements(fingerPositionsMeasurements);
+		}
+		function main() {
+			var song = './pages/instrument/FrogsTheme.mid';
+			window.addEventListener('resize', resize);
+			loadSVGImages(svgFiles);
+			resize();
+			loadData(song);
+			
+		}
+		window.onload = main;
+	</script>
+</html>
