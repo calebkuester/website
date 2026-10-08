@@ -294,7 +294,7 @@ function clickNavigateFeatures(leftOrRight){
         && $(divs[divIndex]).hasClass("navigate-button")){
     }
   }
-  changeFeaturesNavText();
+  changeFeaturesNavText(true);
   swapInfoDivs();
   loadInfoContentIntoDiv("info-"+swapperPosition, location);
 }
@@ -339,11 +339,60 @@ function swapInfoDivs(){
   nextDiv.animate({left:0, top:0}, duration, null);
 }
 
-function changeFeaturesNavText(){
-  $("#featureDropdownList").empty();
-  $("#featureDropdownList").append("<p id='featuresNavTitle' class='nav-title'></p>");
+var navItemTime = 170;//ms for one nav item to shrink to nothing, or to grow back
+var navItemStagger = 45;//ms between one item starting to move and the next
+var navChangeCount = 0;//counts changes, so a newer change cancels one still in progress
+
+//Shows the current feature in the right-side nav. With animate, the old items
+//shrink to nothing one after another, the list is refilled, the new items grow
+//back to full size and the title lights up, so it is plain that the nav changed.
+function changeFeaturesNavText(animate){
+  var list = $("#featureDropdownList");
+  var oldItems = list.children(".nav-option");
+  var thisChange = ++navChangeCount;
+  oldItems.stop(true, true);
+  if(!animate || oldItems.length===0){
+    fillFeaturesNav();
+    return;
+  }
+  oldItems.css("overflow", "hidden");
+  oldItems.each(function(index){
+    $(this).delay(index*navItemStagger).animate({height:0, opacity:0}, navItemTime);
+  });
+  setTimeout(function(){
+    if(thisChange!==navChangeCount){
+      return;//the arrows were pressed again; that change will fill the nav
+    }
+    fillFeaturesNav();
+    shineFeaturesNavTitle();
+    list.children(".nav-option").each(function(index){
+      var item = $(this);
+      var fullHeight = item.height();
+      item.css({height:0, opacity:0, overflow:"hidden"});
+      item.delay(index*navItemStagger).animate({height:fullHeight, opacity:1}, navItemTime, function(){
+        //back to its natural size, so its submenu can still open
+        item.css({height:"", opacity:"", overflow:""});
+      });
+    });
+  }, navItemTime+((oldItems.length-1)*navItemStagger));
+}
+
+function fillFeaturesNav(){
+  var list = $("#featureDropdownList");
+  list.children(".nav-option").remove();
+  if($("#featuresNavTitle").length===0){
+    list.prepend("<p id='featuresNavTitle' class='nav-title'></p>");
+  }
   $("#featuresNavTitle").text(Object.keys(listOfFeatureOptions[featureIndex])[0]);
   changeFeaturesNavOptions();
+}
+
+//turns the title bright gold with a light passing across it, then back to normal
+function shineFeaturesNavTitle(){
+  var title = $("#featuresNavTitle");
+  title.removeClass("nav-title-shine");
+  void title[0].offsetWidth;//lets the animation start again if it was already running
+  title.addClass("nav-title-shine");
 }
 function changeFeaturesNavOptions(){
   var i=0;

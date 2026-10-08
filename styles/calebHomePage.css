@@ -17,8 +17,41 @@
   font-size: 1.1em;
   display: block;
 }
+/*hover: nearly white, with the text dark enough to read on it*/
 #featuresSidebar ul li a:hover {
-  background: #fff;
+  background: #f6ead4;
+  color: #5c0f1b;
+}
+/*the title when the nav changes: bright gold, glowing, with a light passing across it*/
+#featuresSidebar {
+  overflow: hidden;/*keeps the passing light inside the nav*/
+}
+#featuresNavTitle {
+  position: relative;
+}
+#featuresNavTitle.nav-title-shine {
+  animation: navTitleGold 1.4s ease-out;
+}
+#featuresNavTitle.nav-title-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: -60%;
+  width: 55%;
+  background: linear-gradient(100deg, rgba(255,255,255,0) 0%, rgba(255,250,210,0.95) 50%, rgba(255,255,255,0) 100%);
+  animation: navTitleLight 0.9s ease-out 0.1s both;
+  pointer-events: none;
+}
+@keyframes navTitleGold {
+  0% { color: #fff; text-shadow: none; }
+  18% { color: #ffd700; text-shadow: 0 0 6px #fff7c2, 0 0 18px #ffd700, 0 0 34px #ffae00; }
+  55% { color: #ffd700; text-shadow: 0 0 4px #fff7c2, 0 0 12px #ffc400; }
+  100% { color: #fff; text-shadow: none; }
+}
+@keyframes navTitleLight {
+  from { left: -60%; }
+  to { left: 120%; }
 }
 #featuresSidebar .active > a{
   color: #fff;
@@ -50,8 +83,8 @@
   display: block;
 }
 #contactSidebar ul li a:hover {
-  color: #7386D5;
-  background: #fff;
+  color: #33439a;
+  background: #edf0fb;
 }
 #contactSidebar .active > a, a[aria-expanded="true"] {
   color: #fff;
