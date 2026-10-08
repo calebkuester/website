@@ -1,0 +1,331 @@
+{
+	"name": "Violin, bowed, without vibrato",
+	"source": "University of Iowa Musical Instrument Samples, https://theremin.music.uiowa.edu/MIS.html",
+	"license": "Free to use for any project, without restriction",
+	"zones": [
+		{
+			"midi": 55,
+			"file": "55.wav",
+			"string": "G",
+			"sampleRate": 32000,
+			"loopStart": 17600,
+			"loopEnd": 40012,
+			"tuneCents": -3.5
+		},
+		{
+			"midi": 56,
+			"file": "56.wav",
+			"string": "G",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 54625,
+			"tuneCents": -9.6
+		},
+		{
+			"midi": 57,
+			"file": "57.wav",
+			"string": "G",
+			"sampleRate": 32000,
+			"loopStart": 22400,
+			"loopEnd": 59133,
+			"tuneCents": -10.6
+		},
+		{
+			"midi": 58,
+			"file": "58.wav",
+			"string": "G",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 68727,
+			"tuneCents": -36.1
+		},
+		{
+			"midi": 59,
+			"file": "59.wav",
+			"string": "G",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 68621,
+			"tuneCents": 32.9
+		},
+		{
+			"midi": 60,
+			"file": "60.wav",
+			"string": "G",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 61879,
+			"tuneCents": 15
+		},
+		{
+			"midi": 61,
+			"file": "61.wav",
+			"string": "G",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 53893,
+			"tuneCents": 44.3
+		},
+		{
+			"midi": 62,
+			"file": "62.wav",
+			"string": "D",
+			"sampleRate": 32000,
+			"loopStart": 17600,
+			"loopEnd": 51006,
+			"tuneCents": -14.5
+		},
+		{
+			"midi": 63,
+			"file": "63.wav",
+			"string": "D",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 59744,
+			"tuneCents": -7.7
+		},
+		{
+			"midi": 64,
+			"file": "64.wav",
+			"string": "D",
+			"sampleRate": 32000,
+			"loopStart": 22400,
+			"loopEnd": 47130,
+			"tuneCents": -32.5
+		},
+		{
+			"midi": 65,
+			"file": "65.wav",
+			"string": "D",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 49923,
+			"tuneCents": 20.8
+		},
+		{
+			"midi": 66,
+			"file": "66.wav",
+			"string": "D",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 67748,
+			"tuneCents": 7
+		},
+		{
+			"midi": 67,
+			"file": "67.wav",
+			"string": "D",
+			"sampleRate": 32000,
+			"loopStart": 17600,
+			"loopEnd": 44823,
+			"tuneCents": -18.1
+		},
+		{
+			"midi": 68,
+			"file": "68.wav",
+			"string": "D",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 60309,
+			"tuneCents": 2.8
+		},
+		{
+			"midi": 69,
+			"file": "69.wav",
+			"string": "A",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 52178,
+			"tuneCents": -7.4
+		},
+		{
+			"midi": 70,
+			"file": "70.wav",
+			"string": "A",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 64396,
+			"tuneCents": -22.1
+		},
+		{
+			"midi": 71,
+			"file": "71.wav",
+			"string": "A",
+			"sampleRate": 32000,
+			"loopStart": 17600,
+			"loopEnd": 40120,
+			"tuneCents": -23.1
+		},
+		{
+			"midi": 72,
+			"file": "72.wav",
+			"string": "A",
+			"sampleRate": 32000,
+			"loopStart": 22400,
+			"loopEnd": 44998,
+			"tuneCents": -35.5
+		},
+		{
+			"midi": 73,
+			"file": "73.wav",
+			"string": "A",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 49701,
+			"tuneCents": 35.8
+		},
+		{
+			"midi": 74,
+			"file": "74.wav",
+			"string": "A",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 56635,
+			"tuneCents": -16
+		},
+		{
+			"midi": 75,
+			"file": "75.wav",
+			"string": "A",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 61651,
+			"tuneCents": -35.2
+		},
+		{
+			"midi": 76,
+			"file": "76.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 17600,
+			"loopEnd": 40275,
+			"tuneCents": -5
+		},
+		{
+			"midi": 77,
+			"file": "77.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 68132,
+			"tuneCents": -18.4
+		},
+		{
+			"midi": 78,
+			"file": "78.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 49641,
+			"tuneCents": -6.2
+		},
+		{
+			"midi": 79,
+			"file": "79.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 22400,
+			"loopEnd": 44884,
+			"tuneCents": -14.8
+		},
+		{
+			"midi": 80,
+			"file": "80.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 63230,
+			"tuneCents": -18.6
+		},
+		{
+			"midi": 81,
+			"file": "81.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 54492,
+			"tuneCents": 12.7
+		},
+		{
+			"midi": 82,
+			"file": "82.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 27200,
+			"loopEnd": 50528,
+			"tuneCents": -9.4
+		},
+		{
+			"midi": 83,
+			"file": "83.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 17600,
+			"loopEnd": 40062,
+			"tuneCents": 7.5
+		},
+		{
+			"midi": 84,
+			"file": "84.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 63434,
+			"tuneCents": -3.6
+		},
+		{
+			"midi": 85,
+			"file": "85.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 64378,
+			"tuneCents": 41.9
+		},
+		{
+			"midi": 87,
+			"file": "87.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 68793,
+			"tuneCents": -12.1
+		},
+		{
+			"midi": 88,
+			"file": "88.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 22400,
+			"loopEnd": 55263,
+			"tuneCents": -1.3
+		},
+		{
+			"midi": 90,
+			"file": "90.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 22400,
+			"loopEnd": 54973,
+			"tuneCents": -14.3
+		},
+		{
+			"midi": 92,
+			"file": "92.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 17600,
+			"loopEnd": 40617,
+			"tuneCents": -8.9
+		},
+		{
+			"midi": 93,
+			"file": "93.wav",
+			"string": "E",
+			"sampleRate": 32000,
+			"loopStart": 32000,
+			"loopEnd": 68440,
+			"tuneCents": 1.2
+		}
+	]
+}
