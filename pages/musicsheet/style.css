@@ -44,7 +44,7 @@ body {
 }
 
 .fingers-head { margin-bottom: 10px; }
-.fingers-head h1 { margin: 2px 0 0; font-size: 19px; font-weight: 650; }
+.fingers-head .title-space { margin: 2px 0 0; font-size: 19px; font-weight: 650; }
 .home-link { font-size: 13px; color: var(--accent); text-decoration: none; }
 .home-link:hover { text-decoration: underline; }
 
@@ -190,6 +190,8 @@ body {
 	align-items: center;
 	gap: 8px;
 }
+
+.group.push-right { margin-left: auto; }
 
 .group label { color: var(--muted); font-size: 13px; margin: 0; }
 .group label.check { color: var(--ink); display: flex; align-items: center; gap: 4px; cursor: pointer; white-space: nowrap; }
