@@ -77,7 +77,7 @@ To show it on a different page, define `SITE_PAGE` and include `feature.php` the
   - **Vibrato:** it wavers, or the file has the modulation wheel up for it. A wavy line runs over the note.
 
   A key above the sheet shows the marks the current track uses, and the track list counts them. Movement of less than about a third of a semitone is played but not marked.
-- "Load sample" opens `midi/FrogsTheme.mid` (several tracks; its flute part has scoops and bends on the long notes). "Glissando demo" opens `midi/GlissandoDemo.mid`, a short violin melody with one of each pitch-bend mark.
+- Opening `#sample` in the URL loads `midi/FrogsTheme.mid` (several tracks; its flute part has scoops and bends on the long notes). "Glissando demo" opens `midi/GlissandoDemo.mid`, a short violin melody with one of each pitch-bend mark.
 
 ### What the sheet shows
 

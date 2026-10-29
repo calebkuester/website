@@ -405,6 +405,7 @@
 						event.first = span.chord.parts.length === 0;
 						// the first part sits where the note was actually played, so the playhead meets it on time
 						if (event.first && span.chord.played >= m.startTick && span.chord.played < m.endTick) { event.tick = span.chord.played; }
+						event.playedEnd = span.chord.playedEnd;       // when the sound stops, used for the last part of a note
 						event.staccato = span.chord.staccato && event.first;
 						event.notes = span.chord.notes.map(function (n) {
 							var spelled = spell(n.pitch + model.shift, m.key);

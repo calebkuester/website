@@ -16,7 +16,7 @@
 	<aside class="fingers">
 		<div class="fingers-head">
 			<a class="home-link" href="/">&larr; Caleb Kuester</a>
-			<h1>Violin music sheet</h1>
+			<div class="title-space" aria-hidden="true">&nbsp;</div>
 		</div>
 		<div id="instrumentChart" class="chart-panel"></div>
 	</aside>
@@ -26,8 +26,6 @@
 			<div class="group">
 				<label class="button primary" for="fileInput">Open MIDI file&hellip;</label>
 				<input id="fileInput" type="file" accept=".mid,.midi,audio/midi,audio/x-midi" hidden>
-				<button id="sampleButton" type="button" class="button">Load sample</button>
-				<button id="glissandoButton" type="button" class="button" title="A short violin melody with slides between notes">Glissando demo</button>
 			</div>
 
 			<div class="group">
@@ -60,6 +58,10 @@
 
 			<div class="group time">
 				<span id="timeDisplay">0:00 / 0:00</span>
+			</div>
+
+			<div class="group push-right">
+				<button id="glissandoButton" type="button" class="button" title="A short violin melody with slides between notes">Glissando demo</button>
 			</div>
 		</header>
 

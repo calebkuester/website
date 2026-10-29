@@ -22,7 +22,7 @@
 
 	function $(id) { return document.getElementById(id); }
 	var els = {
-		file: $('fileInput'), sample: $('sampleButton'), glissando: $('glissandoButton'), track: $('trackSelect'),
+		file: $('fileInput'), glissando: $('glissandoButton'), track: $('trackSelect'),
 		instrument: $('instrumentSelect'), octave: $('octaveSelect'), play: $('playButton'), stop: $('stopButton'),
 		loop: $('loopCheck'), allTracks: $('allTracksCheck'), speed: $('speedRange'), speedOut: $('speedOutput'),
 		time: $('timeDisplay'), status: $('status'), scroll: $('sheetScroll'),
@@ -48,6 +48,8 @@
 	var fileLabel = '';
 	var soundRequest = 0;
 	var previewVoice = null;
+	var glowEvents = null;         // the sheet's note events that the longest-note figure below was worked out for
+	var glowLongest = 0;           // ticks
 
 	var board = new InstrumentChart(els.chart, {
 		onPress: function (pitch) {
@@ -123,14 +125,15 @@
 	/* ---------- tracks ---------- */
 
 	function selectableTracks() {
-		var tracks = score.tracks.filter(function (t) { return !t.percussion; });
-		return tracks.length ? tracks : score.tracks;
+		return score.tracks;
 	}
 
-	// The track with the most distinct note onsets is usually the melody.
+	// The track with the most distinct note onsets is usually the melody (never the drums if there is anything else).
 	function bestTrackPosition() {
 		var tracks = selectableTracks(), best = 0, bestCount = -1;
+		var hasPitched = tracks.some(function (t) { return !t.percussion; });
 		tracks.forEach(function (t, i) {
+			if (hasPitched && t.percussion) { return; }
 			var seen = {}, count = 0;
 			t.notes.forEach(function (n) { if (!seen[n.tick]) { seen[n.tick] = 1; count++; } });
 			if (count > bestCount) { bestCount = count; best = i; }
@@ -145,16 +148,22 @@
 			option.value = i;
 			var slides = t.notes.filter(function (n) { return Notation.slideSemitones(n); }).length;
 			var bends = t.notes.filter(function (n) { return Notation.bendOrnament(n, score.ppq); }).length;
-			option.textContent = t.name + ' (' + t.notes.length + ' notes' + (slides ? ', ' + slides + ' slides' : '') + (bends ? ', ' + bends + ' bends' : '') + ')';
+			option.textContent = t.name + (t.percussion ? ' [drums]' : '') + ' (' + t.notes.length + ' notes' + (slides ? ', ' + slides + ' slides' : '') + (bends ? ', ' + bends + ' bends' : '') + ')';
 			els.track.appendChild(option);
 		});
+	}
+
+	function ownInstrumentName(track) {
+		return track.percussion ? 'Drums & percussion' : player.instrumentName(track.program);
 	}
 
 	function selectTrack(position) {
 		currentTrack = selectableTracks()[position];
 		els.track.value = position;
-		INSTRUMENTS[INSTRUMENTS.length - 1].label = 'Track\u2019s own: ' + player.instrumentName(currentTrack.program);
+		INSTRUMENTS[INSTRUMENTS.length - 1].label = 'Track\u2019s own: ' + ownInstrumentName(currentTrack);
 		els.instrument.options[INSTRUMENTS.length - 1].textContent = INSTRUMENTS[INSTRUMENTS.length - 1].label;
+		// drums only make sense played as drums
+		if (currentTrack.percussion) { els.instrument.selectedIndex = INSTRUMENTS.length - 1; }
 
 		player.stop();
 		updatePlayButton();
@@ -206,8 +215,9 @@
 		if (!choice.sound) {
 			// the track's own instrument
 			var program = currentTrack ? currentTrack.program : 40;
-			key = PROGRAM_CHARTS[program] || null;
-			name = currentTrack ? player.instrumentName(program) : '';
+			// with no file open there is no instrument yet, so no chart until one is chosen
+			key = !currentTrack || currentTrack.percussion ? null : PROGRAM_CHARTS[program] || null;
+			name = currentTrack ? ownInstrumentName(currentTrack) : '';
 		}
 		board.setInstrument(key, name);
 	}
@@ -298,8 +308,10 @@
 	 */
 	function rebuildSong(rewind) {
 		if (!currentTrack) { return; }
-		var lead = selectedSound();
-		trackNotes = playable(currentTrack, function () { return lead; }, 1, partShift);
+		// a drum track played as its own instrument uses a different drum sound for each note
+		var drumsOwn = currentTrack.percussion && !selectedChoice().sound;
+		var lead = drumsOwn ? null : selectedSound();
+		trackNotes = playable(currentTrack, drumsOwn ? trackSound(currentTrack) : function () { return lead; }, 1, partShift);
 		trackNotes.sort(function (a, b) { return a.time - b.time; });
 		longestNote = trackNotes.reduce(function (max, n) { return Math.max(max, n.duration); }, 0);
 
@@ -327,7 +339,7 @@
 			els.play.disabled = false;
 			updatePlayButton();
 			updatePlayhead();
-			if (failed && !player.isLoaded(lead)) { setStatus('Could not load the instrument sound.', true); }
+			if (failed && lead && !player.isLoaded(lead)) { setStatus('Could not load the instrument sound.', true); }
 			else { setStatus(fileLabel + shiftNote() + (failed ? ' \u00B7 ' + failed + ' sound' + (failed > 1 ? 's' : '') + ' unavailable' : '')); }
 		}
 		if (!missing.length) { ready(0); return; }
@@ -365,6 +377,7 @@
 		if (els.play.disabled) { return; }
 		if (player.playing) { player.pause(); } else { player.play(); }
 		updatePlayButton();
+		updatePlayhead();
 	}
 
 	function stop() {
@@ -427,9 +440,49 @@
 		board.show(current, upcoming);
 	}
 
+	// A note turns gold and grows 10% over GLOW_SECONDS from the moment the bar reaches it, stays so
+	// while it sounds, then shrinks and fades back over the same time once it has finished.
+	// (The two changes take real seconds, whatever the speed.)
+	var GLOW_SECONDS = 0.1;
+
+	// the tick at which the sound of this part of a note ends
+	function glowEndTick(event) {
+		var end = event.nextPart || event.playedEnd === undefined ? event.qTick + event.qLen : event.playedEnd;
+		return Math.max(end, event.tick);
+	}
+
+	function updateGlow(seconds) {
+		var lit = [];
+		var events = sheet.noteEvents;
+		if (player.playing && events && events.length) {
+			var speed = els.speed.value / 100;
+			var to = tempoMap.secondsToTicks(seconds);
+			if (glowEvents !== events) {
+				glowEvents = events;
+				glowLongest = events.reduce(function (max, e) { return Math.max(max, glowEndTick(e) - e.tick); }, 0);
+			}
+			var fallTicks = to - tempoMap.secondsToTicks(Math.max(0, seconds - GLOW_SECONDS * speed));
+			var oldest = to - glowLongest - fallTicks;
+			var hi = 0, top = events.length;
+			while (hi < top) {
+				var mid = (hi + top) >> 1;
+				if (events[mid].tick <= to) { hi = mid + 1; } else { top = mid; }
+			}
+			for (var i = hi - 1; i >= 0 && events[i].tick >= oldest; i--) {
+				var e = events[i];
+				var start = tempoMap.ticksToSeconds(e.tick), end = tempoMap.ticksToSeconds(glowEndTick(e));
+				var amount = Math.min(1, (seconds - start) / speed / GLOW_SECONDS);
+				if (seconds > end) { amount *= 1 - (seconds - end) / speed / GLOW_SECONDS; }
+				if (amount > 0) { lit.push({ event: e, amount: amount }); }
+			}
+		}
+		sheet.glow(lit);
+	}
+
 	function updatePlayhead() {
 		if (!currentTrack) { return; }
 		var seconds = player.currentTime();
+		updateGlow(seconds);
 		var p = sheet.pointForTick(tempoMap.secondsToTicks(seconds));
 		els.playhead.style.height = p.height + 'px';
 		els.playhead.style.transform = 'translate(' + p.x + 'px,' + p.top + 'px)';
@@ -456,7 +509,6 @@
 		openFile(els.file.files[0]);
 		els.file.value = '';
 	});
-	els.sample.addEventListener('click', function () { loadSample('FrogsTheme.mid', 'FrogsTheme.mid (sample)'); });
 	els.glissando.addEventListener('click', function () { loadSample('GlissandoDemo.mid', 'GlissandoDemo.mid (glissando demo)'); });
 	els.track.addEventListener('change', function () { selectTrack(+els.track.value); });
 	els.play.addEventListener('click', togglePlay);
@@ -537,6 +589,7 @@
 		option.textContent = choice.label;
 		els.instrument.appendChild(option);
 	});
+	els.instrument.selectedIndex = INSTRUMENTS.length - 1;     // default: the track's own instrument
 	showChart();
 	loadLead();
 	requestAnimationFrame(frame);

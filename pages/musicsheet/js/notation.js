@@ -66,6 +66,12 @@
 		this.clef = 'treble';
 		this.shift = 0;              // octave shift applied when drawing (-12 = 8va, 12 = 8vb)
 		this.neededWidth = 0;
+		// a second canvas laid over the first, where the notes being played are redrawn in gold
+		this.glowCanvas = document.createElement('canvas');
+		this.glowCanvas.style.cssText = 'position:absolute;left:0;top:0;pointer-events:none';
+		canvas.parentNode.insertBefore(this.glowCanvas, canvas.nextSibling);
+		this.glowCtx = this.glowCanvas.getContext('2d');
+		this.glowing = false;
 		this.clefImage = new Image();
 		var self = this;
 		this.clefImage.onload = function () { self.draw(); };
@@ -174,6 +180,12 @@
 		this.canvas.style.width = width + 'px';
 		this.canvas.style.height = height + 'px';
 		this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		this.glowCanvas.width = this.canvas.width;
+		this.glowCanvas.height = this.canvas.height;
+		this.glowCanvas.style.width = width + 'px';
+		this.glowCanvas.style.height = height + 'px';
+		this.glowCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+		this.glowing = false;
 		this.width = width;
 		this.height = height;
 		this.draw();
@@ -566,7 +578,54 @@
 		}
 	};
 
-	Notation.prototype.drawLegerLines = function (x, low, high, bottom, halfWidth) {
+	/*
+	 * Redraw the heads of some notes in gold, grown by up to 10%. `lit` is a list of
+	 * {event, amount} with amount from 0 (as written) to 1 (fully gold and grown).
+	 * An empty list clears them. Only this overlay is touched, never the sheet itself.
+	 */
+	var GOLD = [232, 168, 8];
+	var GLOW_GROWTH = 0.1;
+
+	Notation.prototype.glow = function (lit) {
+		if (!lit.length && !this.glowing) { return; }
+		var ctx = this.glowCtx, self = this;
+		ctx.clearRect(0, 0, this.width, this.height);
+		this.glowing = lit.length > 0;
+		if (!this.geometry) { return; }
+		lit.forEach(function (item) {
+			var g = self.geometry.get(item.event);
+			if (!g || !g.heads) { return; }
+			var a = item.amount, base = item.event.value.base;
+			var ink = [27, 27, 27];
+			var color = 'rgb(' + ink.map(function (c, i) { return Math.round(c + (GOLD[i] - c) * a); }).join(',') + ')';
+			ctx.fillStyle = color;
+			ctx.shadowColor = 'rgba(' + GOLD.join(',') + ',' + (0.9 * a) + ')';
+			ctx.shadowBlur = 9 * a;
+			var scale = 1 + GLOW_GROWTH * a;
+			g.heads.forEach(function (head) { self.drawGlowHead(ctx, head.x, head.y, base, scale); });
+		});
+		ctx.shadowBlur = 0;
+	};
+
+	// Like drawHead, but the hole of an open note keeps its size so the grown ring covers the black one beneath.
+	Notation.prototype.drawGlowHead = function (ctx, x, y, base, scale) {
+		var rx = HEAD_RX, ry = HEAD_RY;
+		ctx.beginPath();
+		if (base === 1) {
+			ctx.ellipse(x, y, rx * 1.18 * scale, ry * 1.02 * scale, 0, 0, Math.PI * 2);
+			ctx.ellipse(x, y, rx * 0.56, ry * 0.74, 0.7, 0, Math.PI * 2);
+			ctx.fill('evenodd');
+		} else if (base === 2) {
+			ctx.ellipse(x, y, rx * scale, ry * scale, -0.35, 0, Math.PI * 2);
+			ctx.ellipse(x, y, rx * 0.8, ry * 0.46, -0.62, 0, Math.PI * 2);
+			ctx.fill('evenodd');
+		} else {
+			ctx.ellipse(x, y, rx * scale, ry * scale, -0.35, 0, Math.PI * 2);
+			ctx.fill();
+		}
+	};
+
+	Notation.prototype.drawLegerLines =function (x, low, high, bottom, halfWidth) {
 		var ctx = this.ctx;
 		ctx.lineWidth = 1;
 		ctx.beginPath();
